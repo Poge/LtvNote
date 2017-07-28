@@ -10,6 +10,7 @@ import android.text.Editable;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
+import android.text.TextUtils;
 import android.text.style.ImageSpan;
 import android.util.Log;
 import android.view.View;
@@ -34,6 +35,7 @@ import org.litepal.crud.callback.FindMultiCallback;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import rx.Observable;
@@ -366,8 +368,33 @@ public class NotePresenter {
 
     public void changeBackgroundColor() {
         int bgColor = note.getBgColor();
-        bgColor=++bgColor>4?bgColor:1;
+        bgColor = ++bgColor > 4 ? 1 : bgColor;
+        callBack.changeBackGroundColor(PreferenceUtil.getNoteBackgroundColor(context, bgColor));
         note.setBgColor(bgColor);
+    }
+
+
+    public void save(String text) {
+        if (note.getId() == 0 && TextUtils.isEmpty(text.trim()))
+            return;
+        if (!text.equals(note.getContentAll()))
+            note.setContentAll(text);
+
+        List<NoteMediaInfo> mediaInfos = note.getMediaInfos();
+        Iterator<NoteMediaInfo> iterator = mediaInfos.iterator();
+        String pureText = new String(text);
+        while (iterator.hasNext()) {
+            NoteMediaInfo info = iterator.next();
+            pureText.replace(info.getMediaUrl(), "");
+            int index = text.indexOf(info.getMediaUrl());
+            if (index == -1)
+                iterator.remove();
+        }
+
+        pureText.replaceAll("['\n']{2,}", "\n");
+        note.setContentText(pureText);
+        note.save();
+
     }
 
 

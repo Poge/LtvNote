@@ -24,4 +24,6 @@ public interface INoteLoadCallBack {
 
     void addNoteMediaInfo(SpannableString ss);
 
+    void changeBackGroundColor(int bgColor);
+
 }

@@ -45,6 +45,7 @@
             android:textIsSelectable="false"
             android:linksClickable="false"
             android:minLines="13"
+            android:textColor="@color/text_color_black"
             android:paddingBottom="10dp"
             android:scrollbars="none" >
         </EditText>

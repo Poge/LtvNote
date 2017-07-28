@@ -174,6 +174,11 @@ public class NoteActivity extends AppCompatActivity implements INoteLoadCallBack
     }
 
     @Override
+    public void changeBackGroundColor(int bgColor) {
+        scrollView.setBackgroundColor(bgColor);
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.add_remind:
