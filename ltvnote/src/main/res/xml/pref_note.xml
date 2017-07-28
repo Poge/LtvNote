@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <com.ltv.note.view.pref.NotePref
+        android:key="fontsize"
+        android:persistent="true"
+        android:title="@string/font_size"
+        android:icon="@drawable/set_go">
+    </com.ltv.note.view.pref.NotePref>
+    <com.ltv.note.view.pref.NotePref
+        android:key="notecolor"
+        android:persistent="true"
+        android:title="@string/set_color">
+    </com.ltv.note.view.pref.NotePref>
+    <com.ltv.note.view.pref.NotePref
+        android:key="noteshare"
+        android:persistent="true"
+        android:title="@string/share_setting"
+        android:icon="@drawable/set_go">
+    </com.ltv.note.view.pref.NotePref>
+    <com.ltv.note.view.pref.NotePref
+        android:key="appinfo"
+        android:persistent="false"
+        android:title="@string/set_info"
+        android:icon="@drawable/set_go">
+    </com.ltv.note.view.pref.NotePref>
+</PreferenceScreen>

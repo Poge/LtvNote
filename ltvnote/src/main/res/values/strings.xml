@@ -1,0 +1,117 @@
+<resources>
+
+    <string name="app_name">便签</string>
+    <string name="action_settings">设 置</string>
+    <string name="search_hint">搜索便签</string>
+    <string name="set_text">文字大小</string>
+    <string name="set_color">新建便签默认背景色</string>
+    <string name="set_info">关于我们</string>
+    <string name="activity_home">便 签</string>
+    <string name="activity_folder">便 签 夹</string>
+    <string name="activity_setting">设 置</string>
+    <string name="save_success">已保存</string>
+    <string name="save_fail">保存失败</string>
+    <string name="empty_note">空便签</string>
+    <string name="unnamed">未命名</string>
+    <string name="export_success">已导出到</string>
+    <string name="export_fail">导出失败</string>
+    <string name="no_select">没有选中任何便签或便签夹</string>
+    <string name="illegal_move">不能移动便签夹</string>
+    <string name="note_new">新建便签夹</string>
+    <string name="notefile_out">移出便签夹</string>
+    <string name="empty_warning">便签夹名不能为空</string>
+    <string name="notefile_existed">该便签夹名已存在</string>
+    <string name="move_success">已移动到</string>
+    <string name="move_fail">移动失败</string>
+    <string name="delete_success">删除成功</string>
+    <string name="delete_fail">删除失败</string>
+    <string name="font_bigger">超大</string>
+    <string name="font_big">大</string>
+    <string name="font_normal">正常</string>
+    <string name="font_small">小</string>
+    <string name="note_file">便签夹</string>
+    <string name="note_media">媒体便签</string>
+    <string name="note_total_1">共</string>
+    <string name="note_total_2">条</string>
+    <string name="note_choose">选择便签夹</string>
+    <string name="font_size">文字大小</string>
+    <string name="close">关 闭</string>
+    <string name="default_color">默认背景色</string>
+    <string name="blue">蓝色</string>
+    <string name="green">绿色</string>
+    <string name="yellow">黄色</string>
+    <string name="pink">粉色</string>
+    <string name="file_missed">文件未找到</string>
+    <string name="share_setting">分享设置</string>
+    <string name="share_text">文本</string>
+    <string name="share_file">文件</string>
+    <string name="about_version">版本更新</string>
+    <string name="about_info">信息</string>
+    <string name="about_net">官方网站</string>
+    <string name="about_version_text">已是最新版本</string>
+    <string name="about_info_text">全普光电科技有限公司</string>
+    <string name="alarm_seted">便签闹钟已设置</string>
+    <string name="alarm_set_time">请设置时间</string>
+    <string name="alarm_open_switch">请打开闹钟开关</string>
+    <string name="alarm_time_passed">设定时间已过</string>
+    <string name="alarm_close">便签闹钟已关闭</string>
+    <string name="alarm_success">便签闹钟设置成功</string>
+    <string name="alarm_delay">便签闹钟延时十分钟后提醒</string>
+    <string name="media_num_limit">媒体数量已达到上限</string>
+    <string name="delete_function">确定删除选中的便签或便签夹?</string>
+    <string name="delete_note">删除便签</string>
+    <string name="add_alarm">便签闹钟</string>
+    <string name="time">时间</string>
+    <string name="set_time">请设置时间</string>
+    <string name="alarm_switch">闹钟开关</string>
+    <string name="ring">震动时响铃</string>
+    <string name="share_title">分享便签</string>
+    <string name="attention">提示</string>
+    <string name="alarm_fail">本次便签闹钟提醒已失效!</string>
+    <string name="confirm">确 认</string>
+    <string name="cancel">取 消</string>
+    <string name="delete">删 除</string>
+    <string name="notifi_text">这个标签闹钟已过期</string>
+    <string name="tip_scroll">滑动可关闭闹钟</string>
+    <string name="open_share">正在打开分享</string>
+    <string name="about_net_text">www.qualper.com</string>
+    <string name="note_link_tel">Call</string>
+    <string name="note_link_email">Send email</string>
+    <string name="note_link_web">Browse web</string>
+    <string name="note_link_other">Open map</string>
+    <string name="about_copyright">Copyright © 2015-2015 All Rights Reserved</string>
+
+
+    <string name="select_all">全  选</string>
+    <string name="select_none">取消全选</string>
+    <string name="menu_background">背景色</string>
+    <string name="menu_save">保存</string>
+    <string name="title_activity_settings">Settings</string>
+
+    <!-- Strings related to Settings -->
+
+    <string-array name="entries_font_size">
+        <item>@string/font_small</item>
+        <item>@string/font_normal</item>
+        <item>@string/font_big</item>
+        <item>@string/font_bigger</item>
+    </string-array>
+    <string-array name="entries_bg_color">
+        <item>@string/blue</item>
+        <item>@string/green</item>
+        <item>@string/yellow</item>
+        <item>@string/pink</item>
+    </string-array>
+    <string-array name="entries_value_4">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
+    <string-array name="entries_value_2">
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
+
+</resources>

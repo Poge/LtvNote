@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/tool_bar_note"
+        android:layout_width="match_parent"
+        android:navigationIcon="@drawable/add_back"
+        android:layout_height="?actionBarSize"
+        android:background="@color/colorPrimary">
+        <TextView
+            android:id="@+id/title_note"
+            android:layout_width="wrap_content"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"/>
+    </android.support.v7.widget.Toolbar>
+
+
+    <ScrollView
+        android:id="@+id/scrollview_note"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:overScrollMode="never"
+        android:scrollbars="vertical"
+        android:fillViewport="false">
+
+        <EditText
+            android:id="@+id/note_edit_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:autoLink="web"
+            android:paddingTop="10dp"
+            android:background="@null"
+            android:gravity="left|top"
+            android:inputType="textMultiLine"
+            android:letterSpacing="0.02"
+            android:lineSpacingExtra="5dp"
+            android:textIsSelectable="false"
+            android:linksClickable="false"
+            android:minLines="13"
+            android:paddingBottom="10dp"
+            android:scrollbars="none" >
+        </EditText>
+    </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/notes_function"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/add_bg_grey" >
+
+        <ImageView
+            android:id="@+id/add_remind"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:scaleType="center"
+            android:src="@drawable/alarm_off" />
+
+        <ImageView
+            android:id="@+id/add_record"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:scaleType="center"
+            android:src="@drawable/add_record" />
+
+        <ImageView
+            android:id="@+id/add_photo"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:scaleType="center"
+            android:src="@drawable/add_photo" />
+
+        <ImageView
+            android:id="@+id/add_camera"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:scaleType="center"
+            android:src="@drawable/add_camera" />
+
+        <ImageView
+            android:id="@+id/add_send"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:scaleType="center"
+            android:src="@drawable/add_send" />
+    </LinearLayout>
+
+</LinearLayout>

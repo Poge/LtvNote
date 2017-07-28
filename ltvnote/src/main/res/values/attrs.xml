@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="NotePref">
+        <attr name="type" format="enum" >
+            <enum name="noteTextSize" value="1"></enum>
+            <enum name="noteBackground" value="2"></enum>
+            <enum name="noteShare" value="3"></enum>
+            <enum name="noteAppInfo" value="4"></enum>
+        </attr>
+        <attr name="naviDrawable" format="reference" />
+    </declare-styleable>
+
+</resources>

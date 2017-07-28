@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menu_color"
+        android:title="@string/menu_background"
+        android:icon="@drawable/add_change_color"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/menu_save"
+        android:title="@string/menu_save"
+        android:icon="@drawable/add_perform"
+        app:showAsAction="always" />
+</menu>
