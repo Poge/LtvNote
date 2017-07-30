@@ -14,6 +14,7 @@ import com.ltv.note.model.bean.NoteConstant;
 import com.ltv.note.model.bean.NoteFolder;
 import com.ltv.note.model.bean.NoteWrapper;
 import com.ltv.note.util.NoteTimeUtil;
+import com.ltv.note.view.NoteActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +35,7 @@ public class NoteListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     public void setNoteDatas(List<INote> noteDatas) {
         this.noteDatas.clear();
+        if(noteDatas!=null)
         for (int i = 0; i < noteDatas.size(); i++) {
             this.noteDatas.add(new NoteWrapper(noteDatas.get(i),false));
         }
@@ -111,7 +113,7 @@ public class NoteListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     }
 
-    private void onNoteClick(RecyclerView.ViewHolder holder){
+    private void onNoteClick(View view,RecyclerView.ViewHolder holder){
 
         int position = holder.getAdapterPosition();
         int itemViewType = getItemViewType(position);
@@ -125,6 +127,10 @@ public class NoteListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 checkNote(noteWrapper,sView,!selected);
 
         }else{
+            if(itemViewType==NoteConstant.NOTE){
+               Note note= (Note) iNote;
+                NoteActivity.start(view.getContext(),note.getId());
+            }
 
 
         }
@@ -189,7 +195,7 @@ public class NoteListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         @Override
         public void onClick(View v) {
-            onNoteClick(this);
+            onNoteClick(v,this);
         }
 
         @Override
@@ -223,7 +229,7 @@ public class NoteListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         @Override
         public void onClick(View v) {
-            onNoteClick(this);
+            onNoteClick(v,this);
 
         }
 

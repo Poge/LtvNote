@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
 import android.text.style.ImageSpan;
 
 /**
@@ -25,12 +26,13 @@ public class NotePicUtil {
     }
 
 
-    public static SpannableString getNoteMediaSpanText(Context context,String url,Bitmap bitmap){
-        final SpannableString ss = new SpannableString(url);
+    public static SpannableStringBuilder getNoteMediaSpanText(Context context,String url,Bitmap bitmap){
+        final SpannableStringBuilder ss = new SpannableStringBuilder(url);
         final ImageSpan span = new ImageSpan(context, bitmap);
         ss.setSpan(span, 0, url.length(),
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         return ss;
     }
+
 
 }

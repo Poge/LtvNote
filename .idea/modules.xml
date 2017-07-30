@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/MyApplication06.iml" filepath="$PROJECT_DIR$/MyApplication06.iml" />
+      <module fileurl="file://$PROJECT_DIR$/LtvNote.iml" filepath="$PROJECT_DIR$/LtvNote.iml" />
       <module fileurl="file://$PROJECT_DIR$/ltvnote/ltvnote.iml" filepath="$PROJECT_DIR$/ltvnote/ltvnote.iml" />
     </modules>
   </component>

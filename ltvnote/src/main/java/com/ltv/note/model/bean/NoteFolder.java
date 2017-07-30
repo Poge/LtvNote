@@ -27,7 +27,7 @@ public class NoteFolder extends DataSupport implements INote{
     private int noteNum;
 
     @Column(defaultValue = "0")
-    private List<Note> Notes=new ArrayList<>();
+    private List<Note> noteList =new ArrayList<>();
 
 
     public NoteFolder() {
@@ -73,12 +73,12 @@ public class NoteFolder extends DataSupport implements INote{
         this.noteNum = noteNum;
     }
 
-    public List<Note> getNotes() {
-        return Notes;
+    public List<Note> getNoteList() {
+        return noteList;
     }
 
-    public void setNotes(List<Note> notes) {
-        Notes = notes;
+    public void setNoteList(List<Note> noteList) {
+        this.noteList = noteList;
     }
 
     @Override

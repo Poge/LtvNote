@@ -14,6 +14,7 @@ import android.text.TextUtils;
 import android.text.style.ImageSpan;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.ltv.note.R;
 import com.ltv.note.model.NoteImageLoader;
@@ -50,7 +51,7 @@ import rx.schedulers.Schedulers;
 public class NotePresenter {
 
     private int noteWidth;
-    private int noteId;
+    private long noteId;
     private Note note;
     private Context context;
     private List<Subscription> subscriptions = new ArrayList<>();
@@ -61,17 +62,17 @@ public class NotePresenter {
         this.context = context;
     }
 
-    public NotePresenter(Context context, int noteId) {
+    public NotePresenter(Context context, long noteId) {
         this.noteId = noteId;
         this.context = context;
 
     }
 
-    public int getNoteId() {
+    public long getNoteId() {
         return noteId;
     }
 
-    public void setNoteId(int noteId) {
+    public void setNoteId(long noteId) {
         this.noteId = noteId;
     }
 
@@ -87,11 +88,13 @@ public class NotePresenter {
         this.callBack = callBack;
     }
 
-    public Note loadData() {
-        return loadData(noteId, callBack);
+    public void loadData() {
+        note=null;
+        loadData(noteId, callBack);
     }
 
-    public Note loadData(int noteId, final INoteLoadCallBack callBack) {
+    public void loadData(long noteId, final INoteLoadCallBack callBack) {
+        Log.e("poge", "loadData: "+noteId);
         if (noteId == 0) {
             Date date = new Date();
             note = new Note();
@@ -110,21 +113,21 @@ public class NotePresenter {
             note.getMediaInfosAsyn().listen(new FindMultiCallback() {
                 @Override
                 public <T> void onFinish(List<T> t) {
-                    List<NoteMediaInfo> mediaInfos = (List<NoteMediaInfo>) t;
-                    note.setMediaInfos(mediaInfos);
+                    ArrayList<NoteMediaInfo> mediaInfos = (ArrayList<NoteMediaInfo>) t;
+                    note.setNoteMediaInfoList(mediaInfos);
+                    Log.e("poge", "getMediaInfosAsyn: "+mediaInfos.size());
                     loadNoteDate(note, callBack);
                 }
             });
 
         }
 
-        return note;
     }
 
 
-    private void loadNoteDate(Note note, final INoteLoadCallBack callBack) {
+    private void loadNoteDate(final Note note, final INoteLoadCallBack callBack) {
         final Editable editable = new SpannableStringBuilder(note.getContentAll());
-        if (note.getMediaInfos().isEmpty()) {
+        if (note.getNoteMediaInfoList().isEmpty()) {
             callBack.onLoadNoteData(editable);
             return;
         }
@@ -133,6 +136,7 @@ public class NotePresenter {
         ImageLoader.getInstance().loadImage(loadingPicUrl, new SimpleImageLoadingListener() {
             @Override
             public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                preLoadMediaInfo(note.getNoteMediaInfoList(),editable,loadedImage,callBack);
             }
 
             @Override
@@ -163,7 +167,7 @@ public class NotePresenter {
                     int end = textContent.lastIndexOf(mediaUrl);
                     if (start == -1)
                         continue;
-                    SpannableString ss = new SpannableString(mediaUrl);
+                    SpannableStringBuilder ss = new SpannableStringBuilder(mediaUrl);
                     ImageSpan imageSpan = new ImageSpan(context.getApplicationContext(), loadingBitmap);
                     ss.setSpan(imageSpan, 0, mediaUrl.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                     editable.replace(start, start + mediaUrl.length(), ss);
@@ -189,7 +193,8 @@ public class NotePresenter {
                 .subscribe(new Subscriber<Editable>() {
                     @Override
                     public void onCompleted() {
-
+                        //加载便签中的真实图片信息
+                        loadMediaInfo(callBack);
                     }
 
                     @Override
@@ -200,27 +205,28 @@ public class NotePresenter {
                     @Override
                     public void onNext(Editable editable) {
                         callBack.onLoadNoteData(editable);
-                        //加载便签中的真实图片信息
-                        loadMediaInfo(mediaInfos, editable);
+
                     }
                 });
 
     }
 
 
-    private void loadMediaInfo(final List<NoteMediaInfo> mediaInfos, final Editable editable) {
+    private void loadMediaInfo(final INoteLoadCallBack callBack) {
+
         Subscription subscription = Observable
-                .create(new Observable.OnSubscribe<NoteMediaWrapper>() {
+                .create(new Observable.OnSubscribe<Editable>() {
                     @Override
-                    public void call(Subscriber<? super NoteMediaWrapper> subscriber) {
-                        String textContent = editable.toString();
+                    public void call(Subscriber<? super Editable> subscriber) {
+                        String textContent = note.getContentAll();
+                        Editable spannableString = new SpannableStringBuilder(textContent);
                         List<NoteMediaWrapper> datas = new ArrayList<NoteMediaWrapper>();
                         //得到便签从上至下的图片信息
-                        for (NoteMediaInfo mediaInfo : mediaInfos) {
+                        for (NoteMediaInfo mediaInfo : note.getNoteMediaInfoList()) {
                             String url = mediaInfo.getMediaUrl();
                             int start = textContent.indexOf(url);
                             int end = textContent.lastIndexOf(url);
-                            Log.e("poge", " uri: " + url + "start: " + start + " end: " + end);
+                            Log.e("poge", " uri: " + url + " start: " + start + " end: " + end);
                             if (start == -1)
                                 continue;
                             datas.add(new NoteMediaWrapper(start, mediaInfo));
@@ -235,19 +241,20 @@ public class NotePresenter {
                         for (int i = 0; i < datas.size(); i++) {
                             NoteMediaWrapper noteMediaWrapper = datas.get(i);
                             Bitmap noteBitmap = new NoteImageLoader(context, noteMediaWrapper.getMeidaInfo(), noteWidth).getNoteBitmap();
-                            noteMediaWrapper.setBitmap(noteBitmap);
-                            subscriber.onNext(noteMediaWrapper);
+                            ImageSpan imageSpan = new ImageSpan(context, noteBitmap);
+                            spannableString.setSpan(imageSpan,noteMediaWrapper.getStartPos(),
+                                    noteMediaWrapper.getStartPos()+noteMediaWrapper.getMeidaInfo().getMediaUrl().length(),
+                                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                         }
-
+                        subscriber.onNext(spannableString);
                         subscriber.onCompleted();
 
                     }
                 }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<NoteMediaWrapper>() {
+                .subscribe(new Subscriber<Editable>() {
                     @Override
                     public void onCompleted() {
-
                     }
 
                     @Override
@@ -256,13 +263,9 @@ public class NotePresenter {
                     }
 
                     @Override
-                    public void onNext(NoteMediaWrapper noteMediaWrapper) {
-                        int startPos = noteMediaWrapper.getStartPos();
-                        if (startPos == -1)
-                            return;
-                        String mediaUrl = noteMediaWrapper.getMeidaInfo().getMediaUrl();
-                        SpannableString ss = NotePicUtil.getNoteMediaSpanText(context, mediaUrl, noteMediaWrapper.getBitmap());
-                        editable.replace(startPos, startPos + mediaUrl.length(), ss);
+                    public void onNext(Editable editable) {
+                    callBack.onLoadNoteData(editable);
+                        Log.e("poge",editable.toString());
                     }
                 });
 
@@ -270,22 +273,22 @@ public class NotePresenter {
 
     private void addMediaInfo(final Uri uri, final int mediaType) {
         Log.e("poge", "addMediaInfo " + uri.toString());
-        Observable.create(new Observable.OnSubscribe<SpannableString>() {
+        Observable.create(new Observable.OnSubscribe<SpannableStringBuilder>() {
 
             @Override
-            public void call(Subscriber<? super SpannableString> subscriber) {
+            public void call(Subscriber<? super SpannableStringBuilder> subscriber) {
                 NoteMediaInfo picInfo = new NoteMediaInfo();
                 picInfo.setMediaType(mediaType);
                 picInfo.setMediaUrl(uri.toString());
                 note.addNoteMediaInfo(picInfo);
                 Bitmap picBitmap = new NoteImageLoader(context, picInfo, noteWidth).getNoteBitmap();
-                SpannableString ss = NotePicUtil.getNoteMediaSpanText(context, uri.toString(), picBitmap);
+                SpannableStringBuilder ss = NotePicUtil.getNoteMediaSpanText(context, uri.toString(), picBitmap);
                 subscriber.onNext(ss);
                 subscriber.onCompleted();
             }
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<SpannableString>() {
+                .subscribe(new Subscriber<SpannableStringBuilder>() {
 
                     @Override
                     public void onCompleted() {
@@ -298,7 +301,7 @@ public class NotePresenter {
                     }
 
                     @Override
-                    public void onNext(SpannableString ss) {
+                    public void onNext(SpannableStringBuilder ss) {
                         Log.e("poge", "addMediaInfo onNext");
                         if (!callBack.isCursorFirstOfLine()) {
                             callBack.moveCursorToNextLine();
@@ -374,26 +377,76 @@ public class NotePresenter {
     }
 
 
-    public void save(String text) {
-        if (note.getId() == 0 && TextUtils.isEmpty(text.trim()))
-            return;
-        if (!text.equals(note.getContentAll()))
-            note.setContentAll(text);
+    public void save(final String text,final boolean toast) {
+        Observable.create(new Observable.OnSubscribe<Boolean>(){
 
-        List<NoteMediaInfo> mediaInfos = note.getMediaInfos();
-        Iterator<NoteMediaInfo> iterator = mediaInfos.iterator();
-        String pureText = new String(text);
-        while (iterator.hasNext()) {
-            NoteMediaInfo info = iterator.next();
-            pureText.replace(info.getMediaUrl(), "");
-            int index = text.indexOf(info.getMediaUrl());
-            if (index == -1)
-                iterator.remove();
-        }
+            @Override
+            public void call(Subscriber<? super Boolean> subscriber) {
+                Log.e("poge", "save ID:"+note.getId());
+                boolean success=false;
+                if (note.getId() == 0 && TextUtils.isEmpty(text.trim())){
+                    subscriber.onNext(success);
+                    return;
+                }
+                if (!text.equals(note.getContentAll()))
+                    note.setContentAll(text);
 
-        pureText.replaceAll("['\n']{2,}", "\n");
-        note.setContentText(pureText);
-        note.save();
+                List<NoteMediaInfo> mediaInfos = note.getNoteMediaInfoList();
+                Iterator<NoteMediaInfo> iterator = mediaInfos.iterator();
+                String pureText = new String(text);
+                while (iterator.hasNext()) {
+                    NoteMediaInfo info = iterator.next();
+                    pureText=pureText.replace(info.getMediaUrl(), "");
+                    int index = text.indexOf(info.getMediaUrl());
+                    if (index == -1)
+                        iterator.remove();
+                }
+
+                pureText=pureText.replaceAll("['\n']{2,}", "\n");
+                pureText=pureText.trim();
+                note.setContentText(pureText);
+//                success=note.saveOrUpdate();
+                if(note.getId()==0)
+                success=note.save();
+                Log.e("poge", "save getNoteMediaInfoList:"+note.getNoteMediaInfoList().size());
+//                success=note.saveOrUpdate();
+                for (NoteMediaInfo noteMediaInfo : note.getNoteMediaInfoList()) {
+                    if(!noteMediaInfo.isSaved()){
+                        noteMediaInfo.save();
+                    }
+                }
+                subscriber.onNext(success);
+                subscriber.onCompleted();
+            }
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<Boolean>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.e("poge", "save onError " + e.getMessage().toString());
+                if(toast){
+                    Toast.makeText(context,R.string.save_fail,
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onNext(Boolean aBoolean) {
+                Log.e("poge", "save onNext " + aBoolean);
+               if(toast){
+                   Toast.makeText(context,
+                           aBoolean?R.string.save_success:R.string.save_fail,
+                           Toast.LENGTH_SHORT).show();
+               }
+            }
+        });
+
+
 
     }
 

@@ -16,7 +16,9 @@ import java.util.List;
  */
 public class Note extends DataSupport implements INote{
 
-    private int id;
+
+
+    private long id;
 
     @Column(nullable = false)
     private Date createTime;
@@ -28,7 +30,7 @@ public class Note extends DataSupport implements INote{
 
     private String contentText;
 
-    private List<NoteMediaInfo> mediaInfos=new ArrayList<>();
+    private List<NoteMediaInfo> noteMediaInfoList =new ArrayList<NoteMediaInfo>();
 
     private String thumbnail;
 
@@ -38,17 +40,17 @@ public class Note extends DataSupport implements INote{
     @Column(defaultValue = "1")
     private int bgColor;
 
-    private NoteAlarm alarm;
+    private NoteAlarm noteAlarm;
 
 
     public Note() {
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -84,21 +86,23 @@ public class Note extends DataSupport implements INote{
         this.contentText = contentText;
     }
 
-    public List<NoteMediaInfo> getMediaInfos() {
+    public List<NoteMediaInfo> getNoteMediaInfoList() {
 
-        return mediaInfos;
+        return noteMediaInfoList;
     }
     public FindMultiExecutor getMediaInfosAsyn() {
         FindMultiExecutor async = DataSupport.where("note_id = ?", String.valueOf(getId())).findAsync(NoteMediaInfo.class);
         return async;
     }
     public List<NoteMediaInfo> getMediaInfoSync() {
-        mediaInfos=DataSupport.where("note_id = ?",String.valueOf(getId())).find(NoteMediaInfo.class);
-        return mediaInfos;
+        noteMediaInfoList =DataSupport.where("note_id = ?",String.valueOf(getId())).find(NoteMediaInfo.class);
+        return noteMediaInfoList;
     }
 
-    public void setMediaInfos(List<NoteMediaInfo> mediaInfos) {
-        this.mediaInfos = mediaInfos;
+    public void setNoteMediaInfoList(List<NoteMediaInfo> noteMediaInfoList) {
+        if(this.noteMediaInfoList.size()>0)
+            this.noteMediaInfoList.clear();
+        this.noteMediaInfoList.addAll(noteMediaInfoList);
     }
 
     public String getThumbnail() {
@@ -126,19 +130,19 @@ public class Note extends DataSupport implements INote{
     }
 
     public NoteAlarm getAlarm() {
-        return alarm;
+        return noteAlarm;
     }
     public FindExecutor getAlarmAsyn() {
         FindExecutor async = DataSupport.where("note_id = ?", String.valueOf(getId())).findFirstAsync(NoteAlarm.class);
         return async;
     }
     public NoteAlarm getAlarmSync() {
-        alarm=DataSupport.where("note_id = ?", String.valueOf(getId())).findFirst(NoteAlarm.class);
-        return alarm;
+        noteAlarm =DataSupport.where("note_id = ?", String.valueOf(getId())).findFirst(NoteAlarm.class);
+        return noteAlarm;
     }
 
     public void setAlarm(NoteAlarm alarm) {
-        this.alarm = alarm;
+        this.noteAlarm = alarm;
     }
 
     @Override
@@ -148,8 +152,8 @@ public class Note extends DataSupport implements INote{
 
 
     public void addNoteMediaInfo(NoteMediaInfo info){
-        if(!mediaInfos.contains(info))
-            mediaInfos.add(info);
+        if(!noteMediaInfoList.contains(info))
+            noteMediaInfoList.add(info);
 
     }
 

@@ -1,25 +1,35 @@
 package com.ltv.note.model.bean;
 
 import org.litepal.annotation.Column;
+import org.litepal.crud.DataSupport;
 
 /**
  * Created by Anpo on 2017/7/25.
  */
-public class NoteMediaInfo {
+public class NoteMediaInfo extends DataSupport {
 
-    private int id;
+    private long id;
 
     @Column(defaultValue = "0")
     private int mediaType;
 
     private String mediaUrl;
 
+//    private Note note;
+//
+//    public Note getNote() {
+//        return note;
+//    }
 
-    public int getId() {
+//    public void setNote(Note note) {
+//        this.note = note;
+//    }
+
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

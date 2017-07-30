@@ -2,6 +2,7 @@ package com.ltv.note.view.iview;
 
 import android.text.Editable;
 import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
 
 import com.ltv.note.model.bean.Note;
 
@@ -22,7 +23,7 @@ public interface INoteLoadCallBack {
 
     boolean isCursorFirstOfLine();
 
-    void addNoteMediaInfo(SpannableString ss);
+    void addNoteMediaInfo(SpannableStringBuilder ss);
 
     void changeBackGroundColor(int bgColor);
 

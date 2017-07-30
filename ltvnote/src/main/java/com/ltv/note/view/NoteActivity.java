@@ -16,6 +16,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.Layout;
 import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -45,7 +46,7 @@ public class NoteActivity extends AppCompatActivity implements INoteLoadCallBack
     private NotePresenter notePresenter;
     private ScrollView scrollView;
 
-    public static void start(Context context, int noteId) {
+    public static void start(Context context, long noteId) {
         Intent intent = new Intent(context, NoteActivity.class);
         intent.putExtra("NoteId", noteId);
         context.startActivity(intent);
@@ -63,7 +64,7 @@ public class NoteActivity extends AppCompatActivity implements INoteLoadCallBack
             actionBar.setHomeButtonEnabled(true);
             actionBar.setDisplayShowTitleEnabled(false);
         }
-        int noteId = getIntent().getIntExtra("NoteId", 0);
+        long noteId = getIntent().getLongExtra("NoteId", 0);
         scrollView = (ScrollView) findViewById(R.id.scrollview_note);
         etNote = (EditText) findViewById(R.id.note_edit_view);
         ivClock = (ImageView) findViewById(R.id.add_remind);
@@ -104,8 +105,10 @@ public class NoteActivity extends AppCompatActivity implements INoteLoadCallBack
                 notePresenter.changeBackgroundColor();
                 break;
             case R.id.menu_save:
+                notePresenter.save(etNote.getText().toString(),true);
                 break;
             case android.R.id.home:
+                finish();
                 break;
         }
 
@@ -160,7 +163,7 @@ public class NoteActivity extends AppCompatActivity implements INoteLoadCallBack
     }
 
     @Override
-    public void addNoteMediaInfo(SpannableString ss) {
+    public void addNoteMediaInfo(SpannableStringBuilder ss) {
         Log.e("poge", "addNoteMediaInfo");
         int position = etNote.getSelectionStart();
         if (position >= 0) {
@@ -278,4 +281,11 @@ public class NoteActivity extends AppCompatActivity implements INoteLoadCallBack
 
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
+
+    @Override
+    protected void onDestroy() {
+        notePresenter.save(etNote.getText().toString(),false);
+        super.onDestroy();
+    }
+
 }
